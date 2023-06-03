@@ -54,8 +54,10 @@ in
         skylighting-format-blaze-html = noJunk (self.callCabal2nix "skylighting-format-blaze-html" ((thunkSource ./dep/skylighting) + "/skylighting-format-blaze-html") {});
         skylighting-format-context    = noJunk (self.callCabal2nix "skylighting-format-context" ((thunkSource ./dep/skylighting) + "/skylighting-format-context") {});
         skylighting-format-latex      = noJunk (self.callCabal2nix "skylighting-format-latex" ((thunkSource ./dep/skylighting) + "/skylighting-format-latex") {});
-        skylighting-core              = noJunk
-          (self.callCabal2nixWithOptions "skylighting-core" ((thunkSource ./dep/skylighting) + "/skylighting-core") "-fexecutable" {});
+        skylighting-core              = noJunk (pkgs.haskell.lib.overrideCabal
+          (self.callCabal2nixWithOptions "skylighting-core" ((thunkSource ./dep/skylighting) + "/skylighting-core") "-fexecutable" {})
+          { patches = [./skylighting-core.patch]; }
+        );
       };
     });
   }
